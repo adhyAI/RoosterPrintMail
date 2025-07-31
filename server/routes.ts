@@ -10,6 +10,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertDemoRequestSchema.parse(req.body);
       const demoRequest = await storage.createDemoRequest(validatedData);
+      
+      // Log the demo request for monitoring
+      console.log("🎯 NEW DEMO REQUEST RECEIVED:");
+      console.log(`Name: ${demoRequest.name}`);
+      console.log(`Email: ${demoRequest.email}`);
+      console.log(`Company: ${demoRequest.company || "Not provided"}`);
+      console.log(`Phone: ${demoRequest.phone || "Not provided"}`);
+      console.log(`Message: ${demoRequest.message || "No message"}`);
+      console.log(`Time: ${new Date().toLocaleString()}`);
+      console.log("==================================================");
+      
       res.json(demoRequest);
     } catch (error) {
       if (error instanceof z.ZodError) {

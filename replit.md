@@ -40,10 +40,18 @@ The application follows a modern full-stack architecture with a clear separation
    - Solution presentation (kiosk benefits)
    - Feature explanations and comparison tables
    - Industry-specific use cases
-   - Interactive ROI calculator
+   - Interactive ROI calculator with genuine industry formulas
    - Demo request form
 
-2. **UI Component Library**:
+2. **Admin Dashboard** (`/admin`):
+   - Real-time demo request monitoring
+   - Auto-refresh every 30 seconds
+   - Search and filter capabilities
+   - One-click email and phone contact
+   - Statistics overview and analytics
+   - Mobile-responsive design
+
+3. **UI Component Library**:
    - Complete shadcn/ui component set (40+ components)
    - Consistent design system with Radix UI accessibility
    - Responsive design with mobile-first approach
