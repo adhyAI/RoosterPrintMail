@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api/demo-requests", "destination": "/api/demo-requests" },
+    { "source": "/api/demo-request", "destination": "/api/demo-request" },
+    { "source": "/api/demo-requests", "destination": "/api/demo-request" },
     { "source": "/api/roi-calculation", "destination": "/api/roi-calculation" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
