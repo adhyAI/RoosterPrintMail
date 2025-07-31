@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,8 +7,31 @@ import { Input } from "@/components/ui/input";
 import { Mail, Phone, Building, Calendar, RefreshCw } from "lucide-react";
 import { format } from "date-fns";
 import type { DemoRequest } from "@shared/schema";
+import AdminAuth from "@/components/admin-auth";
 
 export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if user is already authenticated
+    const authStatus = localStorage.getItem("admin_authenticated");
+    if (authStatus === "true") {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleAuthenticated = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("admin_authenticated");
+    setIsAuthenticated(false);
+  };
+
+  if (!isAuthenticated) {
+    return <AdminAuth onAuthenticated={handleAuthenticated} />;
+  }
   const [searchTerm, setSearchTerm] = useState("");
 
   const {
@@ -40,9 +63,14 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Demo Requests Dashboard</h1>
-          <p className="text-gray-600">Monitor and manage incoming demo requests</p>
+        <div className="mb-8 flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Demo Requests Dashboard</h1>
+            <p className="text-gray-600">Monitor and manage incoming demo requests</p>
+          </div>
+          <Button onClick={handleLogout} variant="outline" size="sm">
+            Logout
+          </Button>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-6">

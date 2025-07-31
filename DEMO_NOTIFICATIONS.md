@@ -44,6 +44,14 @@ From each request card, you can:
 2. **Footer Link**: Click "Admin Dashboard" in the website footer
 3. **Bookmark**: Save the admin URL for quick access
 
+### Security
+- The admin dashboard is password protected
+- **Default password**: `rooster2025`
+- Authentication persists in browser until logout
+- Only you should have access to this password
+
+**Important**: Change the password in `/client/src/components/admin-auth.tsx` for production use.
+
 ## Best Practices
 
 1. Check the admin dashboard at least twice daily
