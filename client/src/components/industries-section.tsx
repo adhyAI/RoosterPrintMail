@@ -70,9 +70,9 @@ export default function IndustriesSection() {
             And many more: Pack & Ship Centers, Hospitality, Multi-Family
             Dwellings, Corporate Offices
           </p>
-          <Button className="bg-rooster-red hover:bg-rooster-red-dark">
+          {/* <Button className="bg-rooster-red hover:bg-rooster-red-dark">
             Explore Use Cases
-          </Button>
+          </Button> */}
         </div>
       </div>
     </section>
