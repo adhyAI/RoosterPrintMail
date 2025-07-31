@@ -1,9 +1,15 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { MemStorage } from '../server/storage';
-import { roiCalculationInsertSchema } from '../shared/schema';
-// import { fromZodError } from 'zod-validation-error';
+import { z } from 'zod';
 
-const storage = new MemStorage();
+// Define the schema directly here since imports are causing issues
+const roiCalculationInsertSchema = z.object({
+  monthlyVolume: z.number().min(0),
+  currentCosts: z.number().min(0),
+  currentTimeSpent: z.number().min(0),
+});
+
+// Simple in-memory storage for demo purposes
+const roiCalculations: any[] = [];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
@@ -36,7 +42,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         roi: totalMonthlySavings > 0 ? ((totalMonthlySavings + revenueGenerationPerMonth) / 150 * 100) : 0
       };
 
-      const calculation = await storage.createRoiCalculation(calculationData);
+      const calculation = {
+        id: Date.now().toString(),
+        ...calculationData,
+        createdAt: new Date(),
+      };
+      
+      roiCalculations.push(calculation);
       return res.json(calculation);
     } catch (error: any) {
       if (error.name === 'ZodError') {

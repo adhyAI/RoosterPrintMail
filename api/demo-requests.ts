@@ -1,9 +1,17 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { MemStorage } from '../server/storage';
-import { demoRequestInsertSchema } from '../shared/schema';
-// import { fromZodError } from 'zod-validation-error';
+import { z } from 'zod';
 
-const storage = new MemStorage();
+// Define the schema directly here since imports are causing issues
+const demoRequestInsertSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  company: z.string().optional(),
+  phone: z.string().optional(),
+  message: z.string().optional(),
+});
+
+// Simple in-memory storage for demo purposes
+const demoRequests: any[] = [];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
@@ -18,7 +26,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'POST') {
     try {
       const validatedData = demoRequestInsertSchema.parse(req.body);
-      const demoRequest = await storage.createDemoRequest(validatedData);
+      const demoRequest = {
+        id: Date.now().toString(),
+        ...validatedData,
+        createdAt: new Date(),
+      };
+      
+      demoRequests.push(demoRequest);
       
       // Log to console for notifications
       console.log(`🎯 NEW DEMO REQUEST RECEIVED:
@@ -42,7 +56,6 @@ Time: ${new Date().toLocaleString()}
 
   if (req.method === 'GET') {
     try {
-      const demoRequests = await storage.getDemoRequests();
       return res.json(demoRequests);
     } catch (error) {
       console.error('Error fetching demo requests:', error);
