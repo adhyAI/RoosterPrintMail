@@ -3,6 +3,8 @@ import { X } from "lucide-react";
 
 import Chaos from "@assets/Chaos.png";
 
+import PstageMeter from "@assets/PstageMeter.png";
+
 export default function ProblemSection() {
   const scrollToSolution = () => {
     const element = document.querySelector("#solution");
@@ -27,7 +29,7 @@ export default function ProblemSection() {
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           <div className="bg-red-50 border border-red-200 rounded-2xl p-8">
             <img
-              src="https://images.unsplash.com/photo-1606868306217-dbf5046868d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400"
+              src={PstageMeter}
               alt="Old postage meter equipment"
               className="rounded-xl w-full h-48 object-cover mb-6"
             />
