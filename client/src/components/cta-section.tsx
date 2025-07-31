@@ -14,7 +14,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { AlignCenter, Mail, Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 
 export default function CtaSection() {
   const [formData, setFormData] = useState({
@@ -75,11 +75,8 @@ export default function CtaSection() {
           shipping operations with Rooster Print & Mail kiosks.
         </p>
 
-        <div
-          className="grid md:grid-cols-2 gap-8 mb-12"
-          align-items:AlignCenter
-        >
-          <Card className="bg-white bg-opacity-10 border-white border-opacity-20">
+        <div className="flex justify-center mb-12">
+          <Card className="bg-white bg-opacity-10 border-white border-opacity-20 max-w-md w-full">
             <CardHeader>
               <CardTitle className="text-white">Schedule a Demo</CardTitle>
             </CardHeader>
