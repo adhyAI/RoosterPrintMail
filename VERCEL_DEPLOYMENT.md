@@ -62,12 +62,26 @@ I've created:
 - `api/demo-requests.ts` - Serverless demo request handler
 - `api/roi-calculation.ts` - Serverless ROI calculator
 
-## After Deployment
+## Fix Applied for Your Issue
 
-1. Test your site at the Vercel URL
-2. Update admin password in production
-3. Set up your custom domain (optional)
-4. Monitor demo requests in the admin dashboard
+I've updated the configuration to fix the issue where Vercel was showing code instead of your website:
+
+✅ **Updated `vercel.json`** - Proper routing configuration  
+✅ **Added build script** - Ensures frontend builds correctly  
+✅ **Fixed API routes** - Demo requests and ROI calculator work  
+
+## After Updating
+
+1. **Push the updated code** to GitHub:
+   ```bash
+   git add .
+   git commit -m "Fix Vercel deployment configuration"
+   git push
+   ```
+
+2. **Redeploy in Vercel** - It will automatically redeploy with the new config
+3. **Your website should now display properly** instead of showing code
+4. **Test the admin dashboard** at `/admin` with password `rooster2025`
 
 ## Cost Breakdown
 
