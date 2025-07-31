@@ -27,21 +27,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log('Received ROI calculation request:', JSON.stringify(req.body));
       const validatedData = roiCalculationInsertSchema.parse(req.body);
       
-      // Calculate ROI using genuine industry formulas
-      const currentLaborCostPerMonth = validatedData.hoursPerWeek * 4.33 * 25; // $25/hour average
-      const kioskLaborCostPerMonth = validatedData.hoursPerWeek * 0.35 * 4.33 * 25; // 65% time savings
-      const laborSavingsPerMonth = currentLaborCostPerMonth - kioskLaborCostPerMonth;
+      // Calculate ROI using genuine industry formulas (matching preview logic)
       
-      const equipmentSavingsPerMonth = validatedData.currentRental - 150; // Average kiosk cost $150/month
-      const totalMonthlySavings = laborSavingsPerMonth + equipmentSavingsPerMonth;
-      const revenueGenerationPerMonth = validatedData.monthlyVolume * 0.75; // 75 cents per transaction profit
+      // 1. Equipment Cost Comparison
+      // Current equipment cost vs $150/month kiosk cost
+      const monthlyEquipmentSavings = Math.max(0, validatedData.currentRental - 150);
       
+      // 2. Labor Cost Savings 
+      // Average office admin wage: $18-25/hour
+      // Kiosk reduces shipping time by 60-70% (industry average)
+      const hourlyWage = 22; // Average admin wage
+      const efficiencyGain = 0.65; // 65% time reduction
+      const weeklyTimeSaved = validatedData.hoursPerWeek * efficiencyGain;
+      const monthlyTimeSaved = weeklyTimeSaved * 4.33; // Weeks per month
+      const monthlyLaborSavings = monthlyTimeSaved * hourlyWage;
+      
+      // 3. Revenue Generation (for customer-facing businesses)
+      // Typical markup: $1.50-3.00 per transaction
+      // Conservative estimate: $1.75 average margin
+      const averageMarginPerTransaction = 1.75;
+      const monthlyRevenueGenerated = validatedData.monthlyVolume * averageMarginPerTransaction;
+      
+      // 4. Additional cost reductions
+      // Reduced paper waste, printing costs, packaging errors
+      const miscSavings = Math.min(validatedData.monthlyVolume * 0.25, 150); // $0.25 per package, capped at $150
+      
+      // Total calculations
+      const totalMonthlySavings = Math.round(
+        monthlyEquipmentSavings + monthlyLaborSavings + miscSavings
+      );
+      const totalMonthlyRevenue = Math.round(monthlyRevenueGenerated);
+      const totalTimeSaved = Math.round(monthlyTimeSaved);
+
       const calculationData = {
         ...validatedData,
-        potentialSavings: Math.max(0, totalMonthlySavings),
-        revenueGeneration: revenueGenerationPerMonth,
-        timeSavings: validatedData.hoursPerWeek * 0.65, // 65% time savings
-        roi: totalMonthlySavings > 0 ? ((totalMonthlySavings + revenueGenerationPerMonth) / 150 * 100) : 0
+        potentialSavings: totalMonthlySavings,
+        revenueGeneration: totalMonthlyRevenue,
+        timeSavings: totalTimeSaved,
       };
 
       const calculation = {
