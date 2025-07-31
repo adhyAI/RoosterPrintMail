@@ -4,11 +4,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone } from "lucide-react";
+import { AlignCenter, Mail, Phone } from "lucide-react";
 
 export default function CtaSection() {
   const [formData, setFormData] = useState({
@@ -55,7 +61,7 @@ export default function CtaSection() {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -69,14 +75,18 @@ export default function CtaSection() {
           shipping operations with Rooster Print & Mail kiosks.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div
+          className="grid md:grid-cols-2 gap-8 mb-12"
+          align-items:AlignCenter
+        >
           <Card className="bg-white bg-opacity-10 border-white border-opacity-20">
             <CardHeader>
               <CardTitle className="text-white">Schedule a Demo</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="opacity-90 mb-6">
-                See the kiosk in action and learn how it can work for your business
+                See the kiosk in action and learn how it can work for your
+                business
               </p>
               <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
@@ -94,7 +104,9 @@ export default function CtaSection() {
                       <Input
                         id="name"
                         value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         required
                       />
                     </div>
@@ -104,7 +116,9 @@ export default function CtaSection() {
                         id="email"
                         type="email"
                         value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
                         required
                       />
                     </div>
@@ -113,7 +127,9 @@ export default function CtaSection() {
                       <Input
                         id="company"
                         value={formData.company}
-                        onChange={(e) => handleInputChange("company", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("company", e.target.value)
+                        }
                       />
                     </div>
                     <div>
@@ -121,7 +137,9 @@ export default function CtaSection() {
                       <Input
                         id="phone"
                         value={formData.phone}
-                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("phone", e.target.value)
+                        }
                       />
                     </div>
                     <div>
@@ -129,7 +147,9 @@ export default function CtaSection() {
                       <Textarea
                         id="message"
                         value={formData.message}
-                        onChange={(e) => handleInputChange("message", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("message", e.target.value)
+                        }
                         placeholder="Tell us about your shipping needs..."
                       />
                     </div>
@@ -138,7 +158,9 @@ export default function CtaSection() {
                       disabled={demoMutation.isPending}
                       className="w-full bg-rooster-red hover:bg-rooster-red-dark"
                     >
-                      {demoMutation.isPending ? "Submitting..." : "Submit Request"}
+                      {demoMutation.isPending
+                        ? "Submitting..."
+                        : "Submit Request"}
                     </Button>
                   </form>
                 </DialogContent>
@@ -146,7 +168,7 @@ export default function CtaSection() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white bg-opacity-10 border-white border-opacity-20">
+          {/* <Card className="bg-white bg-opacity-10 border-white border-opacity-20">
             <CardHeader>
               <CardTitle className="text-white">Get a Quote</CardTitle>
             </CardHeader>
@@ -212,7 +234,7 @@ export default function CtaSection() {
                 </DialogContent>
               </Dialog>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm opacity-90">
