@@ -1,19 +1,7 @@
 {
-  "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist/public",
-  "routes": [
-    {
-      "src": "/api/demo-requests",
-      "dest": "/api/demo-requests.ts"
-    },
-    {
-      "src": "/api/roi-calculation", 
-      "dest": "/api/roi-calculation.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/api/demo-requests", "destination": "/api/demo-requests" },
+    { "source": "/api/roi-calculation", "destination": "/api/roi-calculation" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
