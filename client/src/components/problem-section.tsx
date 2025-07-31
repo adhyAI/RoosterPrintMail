@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
+import Chaos from "@assets/Chaos.png";
+
 export default function ProblemSection() {
   const scrollToSolution = () => {
     const element = document.querySelector("#solution");
@@ -53,7 +55,7 @@ export default function ProblemSection() {
 
           <div className="bg-red-50 border border-red-200 rounded-2xl p-8">
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400"
+              src={Chaos}
               alt="Disorganized office shipping process"
               className="rounded-xl w-full h-48 object-cover mb-6"
             />
