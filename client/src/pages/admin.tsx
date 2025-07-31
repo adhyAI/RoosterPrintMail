@@ -11,6 +11,7 @@ import AdminAuth from "@/components/admin-auth";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -29,11 +30,6 @@ export default function AdminPage() {
     setIsAuthenticated(false);
   };
 
-  if (!isAuthenticated) {
-    return <AdminAuth onAuthenticated={handleAuthenticated} />;
-  }
-  const [searchTerm, setSearchTerm] = useState("");
-
   const {
     data: demoRequests = [],
     isLoading,
@@ -42,6 +38,10 @@ export default function AdminPage() {
     queryKey: ["/api/demo-requests"],
     refetchInterval: 30000, // Auto-refresh every 30 seconds
   });
+
+  if (!isAuthenticated) {
+    return <AdminAuth onAuthenticated={handleAuthenticated} />;
+  }
 
   const filteredRequests = demoRequests.filter(
     (request) =>
