@@ -20,26 +20,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ROI calculation endpoint
+  // ROI calculation endpoint  
   app.post("/api/roi-calculation", async (req, res) => {
     try {
       const input = insertRoiCalculationSchema.parse(req.body);
       
-      // Calculate ROI based on input
-      const monthlySavings = Math.max(0, input.currentRental - 50); // Assume $50/month for kiosk
-      const hourlyRate = 25; // Assume $25/hour labor cost
-      const timeSavedMonthly = input.hoursPerWeek * 4.33; // Convert weekly to monthly
-      const laborSavings = timeSavedMonthly * hourlyRate;
+      // Industry-based ROI calculation for shipping kiosks
       
-      const potentialSavings = Math.round(monthlySavings + laborSavings);
-      const revenueGenerated = Math.round(input.monthlyVolume * 2); // Assume $2 margin per transaction
-      const timeSaved = Math.round(timeSavedMonthly);
+      // 1. Equipment Cost Savings
+      // Traditional postage meters cost $50-300/month rental + maintenance
+      // Kiosk has lower operational costs (~$75/month including lease, maintenance, supplies)
+      const monthlyEquipmentSavings = Math.max(0, input.currentRental - 75);
+      
+      // 2. Labor Cost Savings 
+      // Average office admin wage: $18-25/hour
+      // Kiosk reduces shipping time by 60-70% (industry average)
+      const hourlyWage = 22; // Average admin wage
+      const efficiencyGain = 0.65; // 65% time reduction
+      const weeklyTimeSaved = input.hoursPerWeek * efficiencyGain;
+      const monthlyTimeSaved = weeklyTimeSaved * 4.33; // Weeks per month
+      const monthlyLaborSavings = monthlyTimeSaved * hourlyWage;
+      
+      // 3. Revenue Generation (for customer-facing businesses)
+      // Typical markup: $1.50-3.00 per transaction
+      // Conservative estimate: $1.75 average margin
+      const averageMarginPerTransaction = 1.75;
+      const monthlyRevenueGenerated = input.monthlyVolume * averageMarginPerTransaction;
+      
+      // 4. Additional cost reductions
+      // Reduced paper waste, printing costs, packaging errors
+      const miscSavings = Math.min(input.monthlyVolume * 0.25, 150); // $0.25 per package, capped at $150
+      
+      // Total calculations
+      const totalMonthlySavings = Math.round(
+        monthlyEquipmentSavings + monthlyLaborSavings + miscSavings
+      );
+      const totalMonthlyRevenue = Math.round(monthlyRevenueGenerated);
+      const totalTimeSaved = Math.round(monthlyTimeSaved);
 
       const calculationData = {
         ...input,
-        potentialSavings,
-        revenueGenerated,
-        timeSaved,
+        potentialSavings: totalMonthlySavings,
+        revenueGenerated: totalMonthlyRevenue,
+        timeSaved: totalTimeSaved,
       };
 
       const calculation = await storage.createRoiCalculation(calculationData);
