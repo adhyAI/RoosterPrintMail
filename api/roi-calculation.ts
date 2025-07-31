@@ -1,11 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { z } from 'zod';
 
-// Define the schema directly here since imports are causing issues
+// Define the schema to match what the frontend sends
 const roiCalculationInsertSchema = z.object({
   monthlyVolume: z.number().min(0),
-  currentCosts: z.number().min(0),
-  currentTimeSpent: z.number().min(0),
+  averageValue: z.number().min(0),
+  currentRental: z.number().min(0),
+  hoursPerWeek: z.number().min(0),
 });
 
 // Simple in-memory storage for demo purposes
@@ -23,14 +24,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method === 'POST') {
     try {
+      console.log('Received ROI calculation request:', JSON.stringify(req.body));
       const validatedData = roiCalculationInsertSchema.parse(req.body);
       
       // Calculate ROI using genuine industry formulas
-      const currentLaborCostPerMonth = validatedData.currentTimeSpent * 4.33 * 25; // $25/hour average
-      const kioskLaborCostPerMonth = validatedData.currentTimeSpent * 0.2 * 4.33 * 25; // 80% time savings
+      const currentLaborCostPerMonth = validatedData.hoursPerWeek * 4.33 * 25; // $25/hour average
+      const kioskLaborCostPerMonth = validatedData.hoursPerWeek * 0.35 * 4.33 * 25; // 65% time savings
       const laborSavingsPerMonth = currentLaborCostPerMonth - kioskLaborCostPerMonth;
       
-      const equipmentSavingsPerMonth = validatedData.currentCosts - 150; // Average kiosk cost $150/month
+      const equipmentSavingsPerMonth = validatedData.currentRental - 150; // Average kiosk cost $150/month
       const totalMonthlySavings = laborSavingsPerMonth + equipmentSavingsPerMonth;
       const revenueGenerationPerMonth = validatedData.monthlyVolume * 0.75; // 75 cents per transaction profit
       
@@ -38,7 +40,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ...validatedData,
         potentialSavings: Math.max(0, totalMonthlySavings),
         revenueGeneration: revenueGenerationPerMonth,
-        timeSavings: validatedData.currentTimeSpent * 0.8, // 80% time savings
+        timeSavings: validatedData.hoursPerWeek * 0.65, // 65% time savings
         roi: totalMonthlySavings > 0 ? ((totalMonthlySavings + revenueGenerationPerMonth) / 150 * 100) : 0
       };
 
@@ -51,10 +53,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       roiCalculations.push(calculation);
       return res.json(calculation);
     } catch (error: any) {
+      console.error('Error in ROI calculation:', error);
       if (error.name === 'ZodError') {
-        return res.status(400).json({ error: 'Invalid request data' });
+        console.error('Validation error details:', error.errors);
+        return res.status(400).json({ 
+          error: 'Invalid request data',
+          details: error.errors
+        });
       }
-      console.error('Error creating ROI calculation:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
   }
