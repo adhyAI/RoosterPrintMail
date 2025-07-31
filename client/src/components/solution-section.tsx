@@ -1,5 +1,7 @@
 import { Monitor, Scale, Printer, Truck } from "lucide-react";
 
+import RoosterMachine from "@assets/RoosterMachine.png";
+
 export default function SolutionSection() {
   return (
     <section
@@ -21,7 +23,7 @@ export default function SolutionSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <img
-              src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&h=500"
+              src={RoosterMachine}
               alt="Modern self-service kiosk technology"
               className="rounded-2xl shadow-2xl w-full"
             />
