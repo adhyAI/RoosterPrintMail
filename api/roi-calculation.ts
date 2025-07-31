@@ -62,8 +62,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const calculationData = {
         ...validatedData,
         potentialSavings: totalMonthlySavings,
-        revenueGeneration: totalMonthlyRevenue,
-        timeSavings: totalTimeSaved,
+        revenueGenerated: totalMonthlyRevenue,
+        timeSaved: totalTimeSaved,
       };
 
       const calculation = {
